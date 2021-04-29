@@ -28,6 +28,10 @@ module.exports = {
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
       },
+      spacing: {
+        '2/3': '66.666667%',
+        '5/6': '83.333333%',
+      },
     },
   },
   variants: {

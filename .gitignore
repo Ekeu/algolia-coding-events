@@ -32,3 +32,9 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+# sample images
+/public/assets/images/sample/*
+
+# sample data
+/pages/api/events/*.json
