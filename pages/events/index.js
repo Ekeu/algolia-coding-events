@@ -1,7 +1,11 @@
+import Link from 'next/link';
 import Layout from '@/components/layout/layout.component';
 import Event from '@/components/event-item/event-item.component';
-import { API_URL } from '@/config/index';
-export default function EventsPage({ events }) {
+import EventPagination from '@/components/event-pagination/event-pagination.component';
+import { API_URL, EVENTS_PER_PAGE } from '@/config/index';
+
+
+export default function EventsPage({ events, page, totalEventsCount }) {
   return (
     <Layout>
       <div className='bg-blue-gray-50'>
@@ -20,6 +24,17 @@ export default function EventsPage({ events }) {
                 <Event key={event.id} event={event} />
               ))}
             </ul>
+            <nav
+              className='px-4 py-3 flex items-center justify-between border-t border-blue-gray-200 sm:px-6'
+              aria-label='Pagination'
+            >
+              <div className='flex-1 flex justify-between sm:justify-end'>
+                <EventPagination
+                  page={page}
+                  totalEventsCount={totalEventsCount}
+                />
+              </div>
+            </nav>
           </div>
         </div>
       </div>
@@ -42,14 +57,20 @@ export default function EventsPage({ events }) {
  *
  * getServerSideProps = (fetch data on each request)
  */
-export async function getStaticProps() {
-  const res = await fetch(`${API_URL}/events?_sort=date:ASC`);
-  const events = await res.json();
-
+export async function getServerSideProps({ query: { page = 1 } }) {
+  // Check if on first page
+  const begin = +page === 1 ? 0 : (+page - 1) * EVENTS_PER_PAGE;
+  const getTotalEventsCount = await fetch(`${API_URL}/events/count`);
+  const totalEventsCount = await getTotalEventsCount.json();
+  const getEvents = await fetch(
+    `${API_URL}/events?_sort=date:ASC&_limit=${EVENTS_PER_PAGE}&_start=${begin}`
+  );
+  const events = await getEvents.json();
   return {
     props: {
       events,
+      page: +page,
+      totalEventsCount,
     },
-    revalidate: 1,
   };
 }

@@ -17,12 +17,9 @@ export default function Layout({ title, keywords, description, children }) {
           href='https://fonts.googleapis.com/css2?family=Bangers&family=Hind:wght@300;400;500;600;700&family=Poppins:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,300;1,400&display=swap'
           rel='stylesheet'
         />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/instantsearch.css@7.4.5/themes/satellite-min.css" integrity="sha256-TehzF/2QvNKhGQrrNpoOb2Ck4iGZ1J/DI4pkd2oUsBc=" crossOrigin="anonymous"/>
         <meta name='description' content={description} />
         <meta name='keywords' content={keywords} />
-        <script
-          type='text/javascript'
-          src={`https://maps.googleapis.com/maps/api/js?key=${process.env.GOOGLE_PLACES_API_KEY}&libraries=places`}
-        />
       </Head>
       <Header />
       <ToastContainer

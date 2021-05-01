@@ -3,8 +3,11 @@ import Link from 'next/link';
 import unified from 'unified';
 import parse from 'remark-parse';
 import remark2react from 'remark-react';
+import { toast } from 'react-toastify';
+import { useRouter } from 'next/router';
 
 import CustomLink from '@/components/custom-link/custom-link.component';
+import Notification from '@/components/notification/notification.component';
 import CustomLinkRemark from '@/components/custom-link-remark/custom-link-remark.component';
 import CustomButton from '@/components/custom-button/custom-button.component';
 import Layout from '@/components/layout/layout.component';
@@ -12,6 +15,7 @@ import { API_URL } from '@/config/index';
 import { PencilIcon, TrashIcon } from '@heroicons/react/solid';
 
 export default function EventPage({ event }) {
+  const router = useRouter();
   const performers = event.performers.split(',').map((p) => p.trim());
 
   const eventDetail = [
@@ -30,6 +34,31 @@ export default function EventPage({ event }) {
       },
     })
     .processSync(event.description).result;
+
+  const handleDeleteEvent = async () => {
+    if (confirm('Are you sure ? There is no coming back!')) {
+      const res = await fetch(`${API_URL}/events/${event.id}`, {
+        method: 'DELETE',
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        toast(
+          <Notification error headline='Error!'>
+            {data.message}
+          </Notification>
+        );
+      } else {
+        toast(
+          <Notification success headline='Success'>
+            Your event was successfully deleted!
+          </Notification>
+        );
+        router.push('/events');
+      }
+    }
+  };
   return (
     <Layout>
       <div className='relative bg-white py-8 sm:py-12'>
@@ -118,7 +147,7 @@ export default function EventPage({ event }) {
                 </CustomLink>
                 <CustomButton
                   type='button'
-                  onClick={() => {}}
+                  onClick={handleDeleteEvent}
                   customStyles='px-6 py-3 text-white bg-gradient-to-r from-orange-400 to-pink-600'
                   addStyles='ml-3 inline-flex items-center font-hind'
                 >
