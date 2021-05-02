@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
 import { useForm, Controller } from 'react-hook-form';
@@ -33,7 +33,7 @@ const schema = yup.object().shape({
 export default function EditEventPage({ event }) {
   const router = useRouter();
   const [eventImagePreview, setEventImagePreview] = useState(
-    event.image ? event.image.format.thumbnail.url : null
+    event.image ? event.image.formats.thumbnail.url : null
   );
   const [showModal, setShowModal] = useState(false);
 
@@ -47,13 +47,19 @@ export default function EditEventPage({ event }) {
     resolver: yupResolver(schema),
   });
 
-  setValue('name', event.name);
-  setValue('performers', event.performers);
-  setValue('venue', event.venue);
-  setValue('address', JSON.parse(event.addressObject));
-  setValue('date', moment(event.date).format('yyyy-MM-DD'));
-  setValue('time', event.time);
-  setValue('description', event.description);
+  useEffect(() => {
+    let mounted = true;
+    if (mounted && event) {
+      setValue('name', event.name);
+      setValue('performers', event.performers);
+      setValue('venue', event.venue);
+      setValue('address', JSON.parse(JSON.stringify(event.addressObject)));
+      setValue('date', moment(event.date).format('yyyy-MM-DD'));
+      setValue('time', event.time);
+      setValue('description', event.description);
+    }
+    return () => (mounted = false);
+  });
 
   //Styles for Google places
   const customStyles = {

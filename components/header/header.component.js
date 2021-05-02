@@ -1,19 +1,15 @@
-import { Fragment } from 'react';
+import { useContext, Fragment } from 'react';
 import Link from 'next/link';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { MenuIcon, XIcon } from '@heroicons/react/outline';
 
 import SearchInput from '../search-input/search-input.component';
+import AuthContext from '@/context/auth.context';
 import CustomLink from '../custom-link/custom-link.component';
 import MobileHeader from '../mobile-header/mobile-header.component';
 
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ');
-}
-
-const currentUser = null;
-
 export default function Header() {
+  const { user, signout } = useContext(AuthContext);
   return (
     <Disclosure as='nav' className='bg-white shadow'>
       {({ open }) => (
@@ -41,9 +37,6 @@ export default function Header() {
                   <CustomLink url='/events' type='nav'>
                     Events
                   </CustomLink>
-                  <CustomLink url='/events/add' type='nav'>
-                    Add Event
-                  </CustomLink>
                 </div>
               </div>
               <div className='flex-1 flex items-center justify-center px-2 lg:ml-6 lg:justify-end'>
@@ -60,17 +53,17 @@ export default function Header() {
                 </Disclosure.Button>
               </div>
               <div className='hidden lg:flex lg:items-center'>
-                {currentUser ? (
+                {user ? (
                   <Menu as='div' className='ml-4 relative flex-shrink-0'>
                     {({ open }) => (
                       <>
                         <div>
-                          <Menu.Button className='bg-white rounded-full flex text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'>
+                          <Menu.Button className='bg-white rounded-full flex text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500'>
                             <span className='sr-only'>Open user menu</span>
                             <img
                               className='h-8 w-8 rounded-full'
-                              src={currentUser.photoURL}
-                              alt={currentUser.userName}
+                              src={user?.photoURL}
+                              alt={user?.username}
                             />
                           </Menu.Button>
                         </div>
@@ -89,12 +82,26 @@ export default function Header() {
                             className='z-20 origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none'
                           >
                             <Menu.Item>
+                              <Link href='/events/add'>
+                                <a className='block px-4 py-2 text-sm text-blue-gray-700 hover:bg-blue-gray-100'>
+                                  Add Event
+                                </a>
+                              </Link>
+                            </Menu.Item>
+                            <Menu.Item>
+                              <Link href='/auth/me/dashboard'>
+                                <a className='block px-4 py-2 text-sm text-blue-gray-700 hover:bg-blue-gray-100'>
+                                  Dashboard
+                                </a>
+                              </Link>
+                            </Menu.Item>
+                            <Menu.Item>
                               <CustomLink
                                 type='button'
                                 role='menuitem'
-                                onClick={() => {}}
+                                onClick={() => signout()}
                               >
-                                Sign out
+                                Sign Out
                               </CustomLink>
                             </Menu.Item>
                           </Menu.Items>
@@ -104,9 +111,9 @@ export default function Header() {
                   </Menu>
                 ) : (
                   <CustomLink
-                    url='/signin'
+                    url='/auth/signin'
                     type='link-button'
-                    customStyles='ml-3 px-4 py-2 text-sm border border-transparent font-hind font-medium text-white bg-gradient-to-r from-indigo-500 to-indigo-700'
+                    customStyles='w-full px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 text-base font-medium font-hind text-white sm:w-auto'
                   >
                     Sign in
                   </CustomLink>
