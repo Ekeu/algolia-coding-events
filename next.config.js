@@ -11,7 +11,7 @@ module.exports = {
           { key: 'Access-Control-Allow-Credentials', value: 'true' },
           {
             key: 'Access-Control-Allow-Origin',
-            value: 'https://algolia-coding-events-*-ekeu.vercel.app',
+            value: '*',
           },
           {
             key: 'Access-Control-Allow-Methods',
