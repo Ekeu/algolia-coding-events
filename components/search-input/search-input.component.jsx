@@ -6,8 +6,8 @@ import { InstantSearch } from 'react-instantsearch-dom';
 import AlgoliaAutoComplete from '../autocomplete-algolia/autocomplete-algolia.component';
 
 const searchClient = algoliasearch(
-  process.env.NEXT_ALGOLIA_APP_ID,
-  process.env.NEXT_ALGOLIA_SEARCH_KEY
+  process.env.NEXT_PUBLIC_ALGOLIA_APP_ID,
+  process.env.NEXT_PUBLIC_ALGOLIA_SEARCH_KEY
 );
 
 export default function SearchInput() {
@@ -24,7 +24,7 @@ export default function SearchInput() {
     <div className='max-w-lg w-full lg:max-w-xs font-hind text-sm'>
       <InstantSearch
         searchClient={searchClient}
-        indexName={process.env.NEXT_ALGOLIA_INDEX_NAME}
+        indexName={process.env.NEXT_PUBLIC_ALGOLIA_INDEX_NAME}
       >
         <div className='relative'>
           <div className='absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none'>

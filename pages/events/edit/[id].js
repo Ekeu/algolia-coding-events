@@ -10,7 +10,6 @@ import Image from 'next/image';
 
 import { parseCookies } from '@/utils/functions';
 
-
 import Layout from '@/components/layout/layout.component';
 import Modal from '@/components/modal/modal.component';
 import ImageUpload from '@/components/image-upload/image-upload.component';
@@ -120,7 +119,7 @@ export default function EditEventPage({ event, token }) {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         name,
@@ -135,7 +134,7 @@ export default function EditEventPage({ event, token }) {
     });
 
     if (!res.ok) {
-      if(res.status === 403 || res.status === 401) {
+      if (res.status === 403 || res.status === 401) {
         toast(
           <Notification error headline='Error!'>
             Unauthorized action
@@ -230,7 +229,7 @@ export default function EditEventPage({ event, token }) {
                         name='address'
                         render={({ field: { onChange, value } }) => (
                           <GooglePlacesAutocomplete
-                            apiKey={process.env.GOOGLE_PLACES_API_KEY}
+                            apiKey={process.env.NEXT_PUBLIC_GOOGLE_API_KEY}
                             selectProps={{
                               value,
                               onChange: onChange,
@@ -358,8 +357,7 @@ export default function EditEventPage({ event, token }) {
 }
 
 export async function getServerSideProps({ params: { id }, req }) {
-  
-  const { token } = parseCookies(req)
+  const { token } = parseCookies(req);
 
   const res = await fetch(`${API_URL}/events/${id}`);
   const event = await res.json();
@@ -367,7 +365,7 @@ export async function getServerSideProps({ params: { id }, req }) {
   return {
     props: {
       event,
-      token
+      token,
     },
   };
 }

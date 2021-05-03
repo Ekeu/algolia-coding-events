@@ -32,7 +32,7 @@ export default function EventMapLocation({ event }) {
     );
   }, []);
 
-  Geocode.setApiKey(process.env.GOOGLE_PLACES_API_KEY);
+  Geocode.setApiKey(process.env.NEXT_PUBLIC_GOOGLE_API_KEY);
 
   if (loading) return false;
 

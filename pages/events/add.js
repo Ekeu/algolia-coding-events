@@ -86,12 +86,12 @@ export default function AddEventPage({ token }) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         name,
         performers,
-        venue,  
+        venue,
         date,
         time,
         description,
@@ -197,7 +197,7 @@ export default function AddEventPage({ token }) {
                         name='address'
                         render={({ field: { onChange, value } }) => (
                           <GooglePlacesAutocomplete
-                            apiKey={process.env.GOOGLE_PLACES_API_KEY}
+                            apiKey={process.env.NEXT_PUBLIC_GOOGLE_API_KEY}
                             selectProps={{
                               value,
                               onChange: onChange,
