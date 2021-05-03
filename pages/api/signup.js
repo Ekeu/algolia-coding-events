@@ -2,7 +2,7 @@ import cookie from 'cookie';
 import { API_URL } from '@/config/index';
 
 export default async (req, res) => {
-  if (req.method === 'POST') {
+  if (req.method === 'POST' || req.method === 'OPTIONS') {
     const { username, email, password, photoURL } = req.body;
 
     const strapiFetch = await fetch(`${API_URL}/auth/local/register`, {
@@ -39,7 +39,7 @@ export default async (req, res) => {
         .json({ message: data.message[0].messages[0].message });
     }
   } else {
-    res.setHeader('Allow', ['POST']);
+    res.setHeader('Allow', ['POST', 'OPTIONS']);
     res.status(405).json({ message: `Method ${req.method} not allowed` });
   }
 };
