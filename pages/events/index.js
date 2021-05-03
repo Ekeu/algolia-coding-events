@@ -1,9 +1,9 @@
 import Link from 'next/link';
+import Image from 'next/image'
 import Layout from '@/components/layout/layout.component';
 import Event from '@/components/event-item/event-item.component';
 import EventPagination from '@/components/event-pagination/event-pagination.component';
 import { API_URL, EVENTS_PER_PAGE } from '@/config/index';
-
 
 export default function EventsPage({ events, page, totalEventsCount }) {
   return (
@@ -16,25 +16,44 @@ export default function EventsPage({ events, page, totalEventsCount }) {
                 CodingLab
               </h2>
               <p className='mt-1 text-4xl font-poppins font-extrabold text-blue-gray-800 sm:text-5xl sm:tracking-tight lg:text-6xl'>
-                Coding Events
+                {!events || events.length === 0
+                  ? 'No Events'
+                  : 'Coding Events'}
               </p>
             </div>
-            <ul className='space-y-12 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-12 sm:space-y-0 lg:grid-cols-3 lg:gap-x-8'>
-              {events.map((event) => (
-                <Event key={event.id} event={event} />
-              ))}
-            </ul>
-            <nav
-              className='px-4 py-3 flex items-center justify-between border-t border-blue-gray-200 sm:px-6'
-              aria-label='Pagination'
-            >
-              <div className='flex-1 flex justify-between sm:justify-end'>
-                <EventPagination
-                  page={page}
-                  totalEventsCount={totalEventsCount}
-                />
+            {(!events || events.length === 0) && (
+              <div className='relative pt-8 px-4 sm:px-6 lg:px-8'>
+                <div className='mt-8 prose prose-indigo prose-lg text-center text-blue-gray-500 mx-auto align-middle justify-center'>
+                  <Image
+                    className='w-full rounded-lg'
+                    src='/assets/images/codingLab-search.svg'
+                    alt='empty-events'
+                    width={655}
+                    height={437}
+                  />
+                </div>
               </div>
-            </nav>
+            )}
+            {events?.length > 0 && (
+              <>
+                <ul className='space-y-12 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-12 sm:space-y-0 lg:grid-cols-3 lg:gap-x-8'>
+                  {events.map((event) => (
+                    <Event key={event.id} event={event} />
+                  ))}
+                </ul>
+                <nav
+                  className='px-4 py-3 flex items-center justify-between border-t border-blue-gray-200 sm:px-6'
+                  aria-label='Pagination'
+                >
+                  <div className='flex-1 flex justify-between sm:justify-end'>
+                    <EventPagination
+                      page={page}
+                      totalEventsCount={totalEventsCount}
+                    />
+                  </div>
+                </nav>
+              </>
+            )}
           </div>
         </div>
       </div>

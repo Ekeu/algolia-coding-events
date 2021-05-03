@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 
 import AuthContext from '@/context/auth.context';
 
-import { generateGravatar } from '../../utils/functions';
+import { generateGravatar } from '@/utils/functions';
 
 import CustomButton from '@/components/custom-button/custom-button.component';
 import Layout from '@/components/layout/layout.component';

@@ -1,21 +1,13 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import unified from 'unified';
-import parse from 'remark-parse';
-import remark2react from 'remark-react';
-import { toast } from 'react-toastify';
-import { useRouter } from 'next/router';
+import renderToString from "next-mdx-remote/render-to-string";
+import hydrate from "next-mdx-remote/hydrate";
 
-import CustomLink from '@/components/custom-link/custom-link.component';
-import Notification from '@/components/notification/notification.component';
-import CustomLinkRemark from '@/components/custom-link-remark/custom-link-remark.component';
-import CustomButton from '@/components/custom-button/custom-button.component';
+import EventMapLocation from '@/components/event-map-location/event-map-location.component';
 import Layout from '@/components/layout/layout.component';
 import { API_URL } from '@/config/index';
-import { PencilIcon, TrashIcon } from '@heroicons/react/solid';
 
-export default function EventPage({ event }) {
-  const router = useRouter();
+export default function EventPage({ event, source }) {
   const performers = event.performers.split(',').map((p) => p.trim());
 
   const eventDetail = [
@@ -26,39 +18,8 @@ export default function EventPage({ event }) {
     { label: 'Time', value: event.time },
   ];
 
-  const content = unified()
-    .use(parse)
-    .use(remark2react, {
-      remarkReactComponents: {
-        a: CustomLinkRemark,
-      },
-    })
-    .processSync(event.description).result;
+  const content = hydrate(source)
 
-  const handleDeleteEvent = async () => {
-    if (confirm('Are you sure ? There is no coming back!')) {
-      const res = await fetch(`${API_URL}/events/${event.id}`, {
-        method: 'DELETE',
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        toast(
-          <Notification error headline='Error!'>
-            {data.message}
-          </Notification>
-        );
-      } else {
-        toast(
-          <Notification success headline='Success'>
-            Your event was successfully deleted!
-          </Notification>
-        );
-        router.push('/events');
-      }
-    }
-  };
   return (
     <Layout>
       <div className='relative bg-white py-8 sm:py-12'>
@@ -116,49 +77,14 @@ export default function EventPage({ event }) {
                 />
               </div>
               <div className='relative pt-64 pb-36 rounded-2xl shadow-xl overflow-hidden'>
-                <Image
-                  className='absolute inset-0 h-full w-full object-cover'
-                  src={
-                    event.image?.formats
-                      ? event.image.formats.thumbnail.url
-                      : '/assets/images/codingLab-default-bg-event.png'
-                  }
-                  alt={event.name}
-                  layout='fill'
-                />
+                <div className='absolute inset-0 h-full w-full object-cover'>
+                  <EventMapLocation event={event} />
+                </div>
               </div>
             </div>
           </div>
 
           <div className='relative mx-auto max-w-md px-4 sm:max-w-3xl sm:px-6 lg:px-0'>
-            {/* Content area */}
-            <div className='hidden pb-5 border-b border-blue-gray-200 sm:flex justify-end'>
-              <div className='mt-3 flex sm:mt-0 sm:ml-4'>
-                <CustomLink
-                  type='link-button'
-                  url={`/events/edit/${event.id}`}
-                  customStyles='px-6 py-3 border border-blue-gray-300 text-base font-medium text-blue-gray-700 bg-white hover:bg-blue-gray-50'
-                >
-                  <PencilIcon
-                    className='-ml-1 mr-2 h-5 w-5'
-                    aria-hidden='true'
-                  />
-                  Edit event
-                </CustomLink>
-                <CustomButton
-                  type='button'
-                  onClick={handleDeleteEvent}
-                  customStyles='px-6 py-3 text-white bg-gradient-to-r from-orange-400 to-pink-600'
-                  addStyles='ml-3 inline-flex items-center font-hind'
-                >
-                  <TrashIcon
-                    className='-ml-1 mr-2 h-5 w-5'
-                    aria-hidden='true'
-                  />
-                  Delete Event
-                </CustomButton>
-              </div>
-            </div>
             <div className='pt-12 sm:pt-16 lg:pt-20'>
               <h2 className='text-3xl text-blue-gray-800 font-extrabold tracking-tight sm:text-4xl font-poppins'>
                 {event.name}
@@ -208,33 +134,6 @@ export default function EventPage({ event }) {
                   </a>
                 </Link>
               </div>
-              <div className='mt-6 flex sm:hidden pb-5 justify-start'>
-                <div className='mt-3 flex sm:mt-0 sm:ml-4'>
-                  <CustomLink
-                    type='link-button'
-                    url={`/events/edit/${event.id}`}
-                    customStyles='px-6 py-3 border border-blue-blue-gray-300 text-base font-medium text-blue-blue-gray-700 bg-white hover:bg-blue-gray-50'
-                  >
-                    <PencilIcon
-                      className='-ml-1 mr-2 h-5 w-5'
-                      aria-hidden='true'
-                    />
-                    Edit event
-                  </CustomLink>
-                  <CustomButton
-                    type='button'
-                    onClick={() => {}}
-                    customStyles='px-6 py-3 text-white bg-gradient-to-r from-orange-400 to-pink-600'
-                    addStyles='ml-3 inline-flex items-center font-hind'
-                  >
-                    <TrashIcon
-                      className='-ml-1 mr-2 h-5 w-5'
-                      aria-hidden='true'
-                    />
-                    Delete Event
-                  </CustomButton>
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -246,9 +145,11 @@ export default function EventPage({ event }) {
 export async function getServerSideProps({ query: { slug } }) {
   const res = await fetch(`${API_URL}/events/?slug=${slug}`);
   const events = await res.json();
+  const mdxSource = await renderToString(events[0].description)
   return {
     props: {
       event: events[0],
+      source: mdxSource
     },
   };
 }

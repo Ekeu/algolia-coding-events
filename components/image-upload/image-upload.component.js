@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { CloudUploadIcon } from '@heroicons/react/outline';
 import { Dialog } from '@headlessui/react';
 import CustomButton from '@/components/custom-button/custom-button.component';
@@ -10,9 +10,11 @@ export default function ImageUpload({
   handleImageUpload,
   onClose,
   title,
+  token,
 }) {
   const [imageToUpload, setImageToUpload] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [imagePreview, setImagePreview] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,6 +27,9 @@ export default function ImageUpload({
 
     const res = await fetch(`${API_URL}/upload`, {
       method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
       body: eventFormData,
     });
     setLoading(false);
@@ -32,7 +37,22 @@ export default function ImageUpload({
       handleImageUpload();
     }
   };
+  useEffect(() => {
+    if (!imageToUpload) {
+      setImagePreview(null);
+      return;
+    }
+    const objectUrl = URL.createObjectURL(imageToUpload);
+    setImagePreview(objectUrl);
+
+    return () => URL.revokeObjectURL(objectUrl);
+  }, [imageToUpload]);
+
   const handleFileChange = (e) => {
+    if (!e.target.files || e.target.files.length === 0) {
+      setImageToUpload(null);
+      return;
+    }
     setImageToUpload(e.target.files[0]);
   };
   return (
@@ -81,8 +101,16 @@ export default function ImageUpload({
                           name='file-upload'
                           type='file'
                           className='sr-only'
+                          accept='image/png image/jpeg'
                           onChange={handleFileChange}
                         />
+                        {imageToUpload && (
+                          <img
+                            className='object-cover shadow-lg rounded-lg'
+                            src={imagePreview}
+                            alt='image-preview'
+                          />
+                        )}
                       </label>
                     </div>
                     <p className='text-xs text-blue-gray-500'>PNG, JPG</p>

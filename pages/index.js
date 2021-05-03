@@ -2,6 +2,7 @@ import Layout from '@/components/layout/layout.component';
 import Event from '@/components/event-item/event-item.component';
 import CustomLink from '@/components/custom-link/custom-link.component';
 import { API_URL } from '@/config/index';
+import Image from 'next/image';
 export default function Home({ events }) {
   return (
     <Layout>
@@ -10,24 +11,41 @@ export default function Home({ events }) {
           <div className='space-y-12'>
             <div className='space-y-5 sm:space-y-4 md:max-w-xl lg:max-w-3xl xl:max-w-none'>
               <h2 className='text-4xl font-hind font-bold tracking-tight sm:text-4xl text-blue-gray-800'>
-                Upcoming Events
+                {events.length > 0 ? 'Upcoming Events' : 'No upcoming event'}
               </h2>
             </div>
-            <ul className='space-y-12 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-12 sm:space-y-0 lg:grid-cols-3 lg:gap-x-8'>
-              {events.map((event) => (
-                <Event key={event.id} event={event} />
-              ))}
-            </ul>
+            {(!events || events.length === 0) && (
+              <div className='relative pt-8 px-4 sm:px-6 lg:px-8'>
+                <div className='mt-8 prose prose-indigo prose-lg text-center text-blue-gray-500 mx-auto align-middle justify-center'>
+                  <Image
+                    className='w-full rounded-lg'
+                    src='/assets/images/codingLab-search.svg'
+                    alt='empty-events'
+                    width={655}
+                    height={437}
+                  />
+                </div>
+              </div>
+            )}
+            {events?.length > 0 && (
+              <ul className='space-y-12 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-12 sm:space-y-0 lg:grid-cols-3 lg:gap-x-8'>
+                {events.map((event) => (
+                  <Event key={event.id} event={event} />
+                ))}
+              </ul>
+            )}
           </div>
-          <div className='text-center mt-6'>
-            <CustomLink
-              url='/events'
-              type='link-button'
-              customStyles='w-full px-6 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-base font-medium font-hind text-white sm:w-auto'
-            >
-              All Events
-            </CustomLink>
-          </div>
+          {events?.length > 0 && (
+            <div className='text-center mt-6'>
+              <CustomLink
+                url='/events'
+                type='link-button'
+                customStyles='w-full px-6 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-base font-medium font-hind text-white sm:w-auto'
+              >
+                All Events
+              </CustomLink>
+            </div>
+          )}
         </div>
       </div>
     </Layout>

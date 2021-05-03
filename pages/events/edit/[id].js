@@ -8,6 +8,9 @@ import { toast } from 'react-toastify';
 import moment from 'moment';
 import Image from 'next/image';
 
+import { parseCookies } from '@/utils/functions';
+
+
 import Layout from '@/components/layout/layout.component';
 import Modal from '@/components/modal/modal.component';
 import ImageUpload from '@/components/image-upload/image-upload.component';
@@ -30,7 +33,7 @@ const schema = yup.object().shape({
     .required('Description is a required field.'),
 });
 
-export default function EditEventPage({ event }) {
+export default function EditEventPage({ event, token }) {
   const router = useRouter();
   const [eventImagePreview, setEventImagePreview] = useState(
     event.image ? event.image.formats.thumbnail.url : null
@@ -117,6 +120,7 @@ export default function EditEventPage({ event }) {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
       },
       body: JSON.stringify({
         name,
@@ -131,6 +135,13 @@ export default function EditEventPage({ event }) {
     });
 
     if (!res.ok) {
+      if(res.status === 403 || res.status === 401) {
+        toast(
+          <Notification error headline='Error!'>
+            Unauthorized action
+          </Notification>
+        );
+      }
       toast(
         <Notification error headline='Error!'>
           Sorry something went wrong. Please try again
@@ -339,19 +350,24 @@ export default function EditEventPage({ event }) {
           handleImageUpload={handleImageUpload}
           title='Event image upload'
           onClose={() => setShowModal(false)}
+          token={token}
         />
       </Modal>
     </Layout>
   );
 }
 
-export async function getServerSideProps({ params: { id } }) {
+export async function getServerSideProps({ params: { id }, req }) {
+  
+  const { token } = parseCookies(req)
+
   const res = await fetch(`${API_URL}/events/${id}`);
   const event = await res.json();
 
   return {
     props: {
       event,
+      token
     },
   };
 }
