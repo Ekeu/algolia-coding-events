@@ -54,8 +54,13 @@ export default function Footer() {
           ))}
         </div>
         <div className='mt-8 md:mt-0 md:order-1'>
-          <a href='https://www.algolia.com/' rel='noreferrer' target='_blank' className='cursor-pointer'>
-            <div className='xl:col-span-1 flex py-1'>
+          <a
+            href='https://www.algolia.com/'
+            rel='noreferrer'
+            target='_blank'
+            className='cursor-pointer'
+          >
+            <div className='xl:col-span-1 flex py-1 justify-center sm:justify-start'>
               <p className='text-blue-gray-400 text-base'>Search Powered By:</p>
               <img
                 className='ml-3 h-5'
