@@ -38,7 +38,7 @@ const customAutoComplete = ({
   const renderSuggestion = (hit) => {
     return (
       <Link href={`/events/${hit.slug}`}>
-        <a href='#' className='block hover:bg-purple-50'>
+        <a className='block hover:bg-purple-50'>
           <div className='flex items-center px-4 py-4 sm:px-6'>
             <div className='min-w-0 flex-1 flex items-center'>
               <div className='min-w-0 flex-1 px-4 md:grid md:grid-cols-2 md:gap-4'>

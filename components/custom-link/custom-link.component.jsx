@@ -54,30 +54,32 @@ export default function CustomLink({
     );
   } else if (type === 'mobile') {
     Component = (
-      <Link
-        href={url}
-        {...otherProps}
-        className={`${
-          pathname === url
-            ? 'bg-indigo-50 border-indigo-500 text-indigo-700'
-            : 'border-transparent text-blue-gray-600 hover:bg-blue-gray-50 hover:border-blue-gray-300 hover:text-blue-gray-800'
-        } block pl-3 pr-4 py-2 border-l-4 text-base font-medium font-hind`}
-      >
-        {children}
+      <Link href={url}>
+        <a
+          {...otherProps}
+          className={`${
+            router.pathname === url
+              ? 'bg-purple-50 border-purple-500 text-purple-700'
+              : 'border-transparent text-blue-gray-600 hover:bg-blue-gray-50 hover:border-blue-gray-300 hover:text-blue-gray-800'
+          } block pl-3 pr-4 py-2 border-l-4 text-base font-medium font-hind`}
+        >
+          {children}
+        </a>
       </Link>
     );
   } else {
     Component = (
-      <Link
-        href={url}
-        {...otherProps}
-        className={`block px-4 py-2 ${
-          customStyles
-            ? customStyles
-            : 'text-sm text-blue-gray-700 hover:bg-blue-gray-100'
-        } font-hind`}
-      >
-        {children}
+      <Link href={url}>
+        <a
+          {...otherProps}
+          className={`block px-4 py-2 ${
+            customStyles
+              ? customStyles
+              : 'text-sm text-blue-gray-700 hover:bg-blue-gray-100'
+          } font-hind`}
+        >
+          {children}
+        </a>
       </Link>
     );
   }

@@ -121,7 +121,7 @@ export default function Header() {
               </div>
             </div>
           </div>
-          <MobileHeader signOut={() => {}} />
+          <MobileHeader signOut={() => signout()} user={user} />
         </>
       )}
     </Disclosure>
