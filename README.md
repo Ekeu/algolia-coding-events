@@ -1,34 +1,61 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+<div align="center">
+  <a href="https://algolia-coding-events.vercel.app/">
+    <img alt="codingLab" src="./public/assets/images/codingLab-logo.svg" height="150px" />
+  </a>
+</div>
 
-## Getting Started
+<br />
 
-First, run the development server:
+<div align="center">
+  <strong style="color:#7C3AED; font-family: 'Poppins'; font-size: 3em; letter-spacing: -4px;">CodingLab</strong>
+  <br />
+</div>
 
-```bash
+---
+
+## What is it? 🧐
+
+CodingLab is a project I developed from ground to step up my technical skills in `NextJS` and take part in [Algolia's Coding Contest](https://github.com/algolia/algolia-coding-contest). It's all about a simple project to create and publish events linked to software development.
+
+---
+
+## Stack Used
+
+I used the following technologies:
+
+1. [NextJS](https://nextjs.org/) as frontend framework
+2. [Tailwind](https://tailwindui.com/) as my css framework
+3. [Algolia's Autocomplet Search](https://www.algolia.com/doc/guides/building-search-ui/ui-and-ux-patterns/autocomplete/js/).
+4. [Strapi](https://strapi.io/) as my CMS
+5. [Mapbox](https://www.mapbox.com/). To show events locations when selecting an event. Just wanted to try something else other than Google Maps
+6. [Google Maps API](https://developers.google.com/maps). I mainly used the Places and Geocoding APIs
+## Want to try it out?
+
+You can see it working online by visiting [CodingLab](https://algolia-coding-events.vercel.app/)
+
+##### OR
+
+1. First get the Strapi Backend [here](https://github.com/Ekeu/algolia-coding-events-strapi-backend) and run it.
+
+2. Create and add in your `.env.local` your Mapbox, Algolia and Google API keys
+
+```env
+NEXT_PUBLIC_GOOGLE_API_KEY='xxxxxxxxxx'
+NEXT_PUBLIC_ALGOLIA_ADMIN_KEY='xxxxxxxxxx'
+NEXT_PUBLIC_ALGOLIA_APP_ID='xxxxxxxxxx'
+NEXT_PUBLIC_ALGOLIA_INDEX_NAME='xxxxxxxxxx'
+NEXT_PUBLIC_ALGOLIA_SEARCH_KEY='xxxxxxxxxx'
+NEXT_PUBLIC_MAPBOX_API_TOKEN='xxxxxxxxxx'
+```
+
+3. Run the server
+
+```npm
 npm run dev
-# or
+
+or
+
 yarn dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
-
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+4. Open your browser and go to http://localhost:3000 to see the result.

@@ -3,8 +3,8 @@ import React from 'react';
 export default function Loader({
   height = 'h-8',
   width = 'h-8',
-  primaryColor = '#D946EF',
-  secondaryColor = '#9333EA',
+  primaryColor = '#F0ABFC',
+  secondaryColor = '#C084FC',
   backgroundColor = 'transparent',
 }) {
   return (
@@ -62,4 +62,4 @@ export default function Loader({
       </svg>
     </>
   );
-};
+}

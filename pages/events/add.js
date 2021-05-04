@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { parseCookies } from '@/utils/functions';
 import { useRouter } from 'next/router';
 import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
@@ -28,6 +29,7 @@ const schema = yup.object().shape({
 
 export default function AddEventPage({ token }) {
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
   const {
     register,
@@ -81,6 +83,7 @@ export default function AddEventPage({ token }) {
 
   //Form handle submit
   const onSubmit = handleSubmit(async (data) => {
+    setLoading(true);
     const { name, performers, venue, address, date, time, description } = data;
     const res = await fetch(`${API_URL}/events`, {
       method: 'POST',
@@ -115,6 +118,7 @@ export default function AddEventPage({ token }) {
         </Notification>
       );
     } else {
+      setLoading(false);
       const event = await res.json();
       toast(
         <Notification success headline='Success'>
@@ -273,6 +277,7 @@ export default function AddEventPage({ token }) {
                 </CustomLink>
                 <CustomButton
                   type='submit'
+                  loading={loading}
                   customStyles='px-6 py-3 text-white bg-gradient-to-r from-purple-600 to-indigo-600'
                   addStyles='ml-3 inline-flex items-center font-hind'
                 >

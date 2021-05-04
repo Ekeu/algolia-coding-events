@@ -8,3 +8,17 @@ export const generateGravatar = (email) => {
 export const parseCookies = (req) => {
   return cookie.parse(req ? req.headers.cookie || '' : '');
 };
+export const returnImage = (event) => {
+  let imageSRC;
+  if (event.image) {
+    if (event.image.formats.medium) {
+      imageSRC = event.image.formats.medium.url;
+    } else {
+      imageSRC = event.image.formats.thumbnail.url;
+    }
+  } else {
+    imageSRC = '/assets/images/codingLab-default-bg-event.png';
+  }
+
+  return imageSRC
+};

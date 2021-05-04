@@ -2,20 +2,21 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { ClockIcon } from '@heroicons/react/solid';
 
+import { returnImage } from '@/utils/functions';
+
+
 export default function Event({ event }) {
   return (
     <div className='space-y-4 cursor-pointer'>
       <div>
         <div className='pb-5/6 relative'>
-          <Image
-            className='h-full w-full object-cover absolute rounded-lg shadow-md'
-            src={
-              event.image
-                ? event.image.formats.thumbnail.url
-                : '/assets/images/codingLab-default-bg-event.png'
-            }
-            layout='fill'
-          />
+          <Link href={`/events/${event.slug}`}>
+            <Image
+              className='h-full w-full object-cover absolute rounded-lg shadow-md'
+              src={returnImage(event)}
+              layout='fill'
+            />
+          </Link>
         </div>
         <Link href={`/events/${event.slug}`}>
           <div className='relative px-4 -mt-16'>

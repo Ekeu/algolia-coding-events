@@ -1,10 +1,11 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import renderToString from "next-mdx-remote/render-to-string";
-import hydrate from "next-mdx-remote/hydrate";
+import renderToString from 'next-mdx-remote/render-to-string';
+import hydrate from 'next-mdx-remote/hydrate';
 
 import EventMapLocation from '@/components/event-map-location/event-map-location.component';
 import Layout from '@/components/layout/layout.component';
+import { returnImage } from '@/utils/functions';
 import { API_URL } from '@/config/index';
 
 export default function EventPage({ event, source }) {
@@ -18,7 +19,7 @@ export default function EventPage({ event, source }) {
     { label: 'Time', value: event.time },
   ];
 
-  const content = hydrate(source)
+  const content = hydrate(source);
 
   return (
     <Layout>
@@ -67,11 +68,7 @@ export default function EventPage({ event, source }) {
               <div className='relative pt-64 pb-36 rounded-2xl shadow-xl overflow-hidden'>
                 <Image
                   className='absolute inset-0 h-full w-full object-cover'
-                  src={
-                    event.image?.formats
-                      ? event.image.formats.thumbnail.url
-                      : '/assets/images/codingLab-default-bg-event.png'
-                  }
+                  src={returnImage(event)}
                   alt={event.name}
                   layout='fill'
                 />
@@ -145,11 +142,11 @@ export default function EventPage({ event, source }) {
 export async function getServerSideProps({ query: { slug } }) {
   const res = await fetch(`${API_URL}/events/?slug=${slug}`);
   const events = await res.json();
-  const mdxSource = await renderToString(events[0].description)
+  const mdxSource = await renderToString(events[0].description);
   return {
     props: {
       event: events[0],
-      source: mdxSource
+      source: mdxSource,
     },
   };
 }
